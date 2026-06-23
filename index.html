@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LAI Yu Ching (TOM) | Portfolio</title>
-    <!-- FontAwesome for Social Media Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -79,14 +78,18 @@
         }
 
         section {
-            padding: 60px 0 100px 0; /* Reduced padding top to bring elements closer together */
+            padding: 60px 0 100px 0;
         }
 
+        /* Updated Section Title to handle dynamic revealing on scroll */
         .section-title {
             font-size: 2rem;
             margin-bottom: 40px;
             display: flex;
             align-items: center;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         .section-title::after {
@@ -98,9 +101,15 @@
             background-color: #233554;
         }
 
+        /* Animation class to display title when scrolled */
+        .section-title.animate-title {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         /* --- First Page / Hero Section --- */
         #welcome {
-            min-height: auto; /* Removed 100vh constraint so About section sits right below it */
+            min-height: auto;
             padding-top: 80px;
             padding-bottom: 80px;
         }
@@ -140,6 +149,7 @@
         }
 
         .action-container {
+            position: relative;
             display: flex;
             align-items: center;
             gap: 20px;
@@ -170,7 +180,7 @@
             transform: translateY(-3px);
         }
 
-        /* Interactive Resume Dropdown Button */
+        /* Interactive Resume Dropdown Button (Opens Downward) */
         .resume-dropdown {
             position: relative;
             display: inline-block;
@@ -199,7 +209,7 @@
         .dropdown-menu {
             display: none;
             position: absolute;
-            top: 50px;
+            top: 52px;
             left: 0;
             background-color: var(--bg-card);
             min-width: 140px;
@@ -286,27 +296,24 @@
             border: 1px solid #233554;
             border-radius: 8px;
             padding: 35px;
-            opacity: 0; /* Hidden initially before intersection trigger */
+            opacity: 0;
             transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        /* Left box slides out from the left edge */
         .about-box.left-slide {
             transform: translateX(-50px);
         }
 
-        /* Right box slides out from the right edge */
         .about-box.right-slide {
             transform: translateX(50px);
         }
 
-        /* Animation target class added by JavaScript when scrolled into view */
         .about-box.animate-slide {
             opacity: 1;
             transform: translateX(0);
         }
 
-        /* Education Inside Elements */
+        /* Education Layout Elements */
         .edu-title {
             font-size: 1.6rem;
             font-weight: 700;
@@ -346,7 +353,6 @@
             margin-bottom: 25px;
         }
 
-        /* Logo Area Container styling */
         .school-logo-container {
             width: 100%;
             height: 80px;
@@ -385,14 +391,13 @@
                 gap: 25px;
             }
             .about-box.left-slide, .about-box.right-slide {
-                transform: translateY(40px); /* Transitions gracefully on mobile stacks upward/downward instead */
+                transform: translateY(40px);
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- Fixed Top Navigation Bar -->
     <nav>
         <div class="nav-logo">LAI Yu Ching</div>
         <div class="nav-links">
@@ -403,43 +408,37 @@
         </div>
     </nav>
 
-    <!-- Main Content Container -->
     <main class="container">
         
-        <!-- First Page / Welcome Section -->
         <section id="welcome">
             <div class="hero-section">
                 
-                <!-- Left Hand Side: Text Lines & Interactive Actions -->
                 <div class="hero-left">
                     <div class="hero-subtitle">Electronic and Computer Engineer</div>
                     <h1 class="hero-name">LAI Yu Ching (TOM)</h1>
                     <p class="hero-description">
-                        Motivated and enthusiastic graduate student specialized in Embedded systems, Analogue Circuit Design, AI networks, and algorithms[cite: 1].
+                        Motivated and enthusiastic graduate student specialized in Embedded systems, Analogue Circuit Design, AI networks, and algorithms.
                     </p>
                     
                     <div class="action-container">
-                        <!-- Iconed Social Buttons -->
                         <div class="social-container">
                             <a href="https://github.com/ANGULARM0MENTUM" target="_blank" class="social-icon" title="GitHub"><i class="fa-brands fa-github"></i></a>
                             <a href="https://www.linkedin.com/in/yu-ching-lai-a65740326" target="_blank" class="social-icon" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
                             <a href="https://www.instagram.com/holy_sith1969?igsh=MTJzaHIyMjE3ejV6cA==" target="_blank" class="social-icon" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
                         </div>
 
-                        <!-- Resume Segmented Dropdown Menu -->
                         <div class="resume-dropdown">
                             <button class="resume-btn" id="resumeBtn">
                                 Resume <i class="fa-solid fa-chevron-down" id="arrowIcon" style="font-size: 0.8rem;"></i>
                             </button>
                             <div class="dropdown-menu" id="resumeMenu">
-                                <a href="assets/LAI_Yu_Ching_Resume (2).pdf" target="_blank">English</a>
-                                <a href="assets/LAI_Yu_Ching_CV_ver2.pdf" target="_blank">Chinese</a>
+                                <a href="assets/LAI_Yu_Ching_Resume_English.pdf" target="_blank">English</a>
+                                <a href="assets/LAI_Yu_Ching_Resume_Chinese.pdf" target="_blank">Chinese</a>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Right Hand Side: Big Profile Picture from Assets -->
                 <div class="hero-right">
                     <div class="profile-frame">
                         <img src="assets/myprofilepic.jpg" alt="LAI Yu Ching">
@@ -449,28 +448,23 @@
             </div>
         </section>
 
-        <!-- About Section with Dynamic Sliding Boxes -->
         <section id="about">
             <div style="width: 100%;">
-                <h2 class="section-title">About Me</h2>
+                <h2 class="section-title" id="aboutTitle">About Me</h2>
                 
                 <div class="about-split">
-                    <!-- Left Hand Side Box: Academic Experience -->
                     <div class="about-box left-slide" id="leftAboutBox">
                         <div class="edu-title">Educations</div>
                         <div class="edu-school">Hong Kong University of Science and Technology</div>
-                        <div class="edu-degree">Bachelor of Engineering[cite: 1]</div>
-                        <div class="edu-major">Major in Electronic and Computer Engineering[cite: 1]</div>
-                        <div class="edu-date">Sep 1, 2022 - 15 July, 2026[cite: 1]</div>
+                        <div class="edu-degree">Bachelor of Engineering</div>
+                        <div class="edu-major">Major in Electronic and Computer Engineering</div>
+                        <div class="edu-date">Sep 1, 2022 - 15 July, 2026</div>
                         
-                        <!-- Reserved Space for School Logo -->
                         <div class="school-logo-container">
-                            <!-- Drop an <img> tag in here later when you have the file asset ready -->
                             <img src="assets/school_logo.jpg" alt="UST_logo">
                         </div>
                     </div>
 
-                    <!-- Right Hand Side Box: Placeholder for your next instructions -->
                     <div class="about-box right-slide" id="rightAboutBox">
                         <div class="edu-title">Professional Overview</div>
                         <p style="color: var(--text-gray); line-height: 1.6;">
@@ -504,7 +498,6 @@
 
     </main>
 
-    <!-- JavaScript Handling interactive elements & scroll transitions -->
     <script>
         // --- Resume dropdown handling ---
         const resumeBtn = document.getElementById('resumeBtn');
@@ -524,20 +517,26 @@
         // --- Intersection Observer for dynamic slide-outs ---
         const observerOptions = {
             root: null,
-            threshold: 0.25 // Trigger when 25% of the section is visible to ensure the title has displayed
+            threshold: 0.15 // Lowered slightly so trigger hits right when user begins to pull page up
         };
 
         const aboutObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    document.getElementById('leftAboutBox').classList.add('animate-slide');
-                    document.getElementById('rightAboutBox').classList.add('animate-slide');
-                    observer.unobserve(entry.target); // Stops tracking once the slide completes successfully
+                    // Reveal the title first, followed by the content boxes sliding inward
+                    document.getElementById('aboutTitle').classList.add('animate-title');
+                    
+                    // Small sequential delay for visual polish
+                    setTimeout(() => {
+                        document.getElementById('leftAboutBox').classList.add('animate-slide');
+                        document.getElementById('rightAboutBox').classList.add('animate-slide');
+                    }, 150);
+
+                    observer.unobserve(entry.target);
                 }
             });
         }, observerOptions);
 
-        // Bind intersection engine onto the main about container node
         aboutObserver.observe(document.getElementById('about'));
     </script>
 
