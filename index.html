@@ -79,15 +79,12 @@
         }
 
         section {
-            padding: 100px 0;
-            min-height: calc(100vh - var(--nav-height));
-            display: flex;
-            align-items: center;
+            padding: 60px 0 100px 0; /* Reduced padding top to bring elements closer together */
         }
 
         .section-title {
             font-size: 2rem;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             display: flex;
             align-items: center;
         }
@@ -102,6 +99,12 @@
         }
 
         /* --- First Page / Hero Section --- */
+        #welcome {
+            min-height: auto; /* Removed 100vh constraint so About section sits right below it */
+            padding-top: 80px;
+            padding-bottom: 80px;
+        }
+
         .hero-section {
             display: flex;
             align-items: center;
@@ -136,7 +139,6 @@
             margin-bottom: 30px;
         }
 
-        /* Action Panel for Links and Resume */
         .action-container {
             display: flex;
             align-items: center;
@@ -197,7 +199,7 @@
         .dropdown-menu {
             display: none;
             position: absolute;
-            top: 50px; /* Sits cleanly above the button */
+            top: 50px;
             left: 0;
             background-color: var(--bg-card);
             min-width: 140px;
@@ -221,7 +223,6 @@
             color: var(--accent-cyan);
         }
 
-        /* Utility class controlled via JavaScript to switch visibility */
         .show-menu {
             display: block;
         }
@@ -233,7 +234,6 @@
             align-items: center;
         }
 
-        /* Framed Profile Picture Layout */
         .profile-frame {
             position: relative;
             width: 300px;
@@ -273,6 +273,93 @@
             transform: translate(4px, 4px);
         }
 
+        /* --- About Section Split Layout & Dynamic Slide-Outs --- */
+        .about-split {
+            display: flex;
+            gap: 30px;
+            width: 100%;
+        }
+
+        .about-box {
+            flex: 1;
+            background-color: var(--bg-card);
+            border: 1px solid #233554;
+            border-radius: 8px;
+            padding: 35px;
+            opacity: 0; /* Hidden initially before intersection trigger */
+            transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* Left box slides out from the left edge */
+        .about-box.left-slide {
+            transform: translateX(-50px);
+        }
+
+        /* Right box slides out from the right edge */
+        .about-box.right-slide {
+            transform: translateX(50px);
+        }
+
+        /* Animation target class added by JavaScript when scrolled into view */
+        .about-box.animate-slide {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Education Inside Elements */
+        .edu-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            margin-bottom: 25px;
+            border-bottom: 1px solid #233554;
+            padding-bottom: 10px;
+        }
+
+        .edu-school {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 5px;
+        }
+
+        .edu-degree {
+            font-size: 1.05rem;
+            color: var(--text-gray);
+            margin-bottom: 3px;
+        }
+
+        .edu-major {
+            font-size: 1.05rem;
+            color: var(--text-gray);
+            margin-bottom: 15px;
+        }
+
+        .edu-date {
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: var(--accent-cyan);
+            background: rgba(100, 255, 218, 0.1);
+            padding: 4px 10px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 25px;
+        }
+
+        /* Logo Area Container styling */
+        .school-logo-container {
+            width: 100%;
+            height: 80px;
+            border: 1px dashed var(--text-gray);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            background: rgba(2, 12, 27, 0.4);
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .hero-section {
@@ -293,6 +380,13 @@
                 width: 240px;
                 height: 240px;
             }
+            .about-split {
+                flex-direction: column;
+                gap: 25px;
+            }
+            .about-box.left-slide, .about-box.right-slide {
+                transform: translateY(40px); /* Transitions gracefully on mobile stacks upward/downward instead */
+            }
         }
     </style>
 </head>
@@ -309,7 +403,7 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
+    <!-- Main Content Container -->
     <main class="container">
         
         <!-- First Page / Welcome Section -->
@@ -321,7 +415,7 @@
                     <div class="hero-subtitle">Electronic and Computer Engineer</div>
                     <h1 class="hero-name">LAI Yu Ching (TOM)</h1>
                     <p class="hero-description">
-                        Motivated and enthusiastic graduate student specialized in Embedded systems, Analogue Circuit Design, AI networks, and algorithms.
+                        Motivated and enthusiastic graduate student specialized in Embedded systems, Analogue Circuit Design, AI networks, and algorithms[cite: 1].
                     </p>
                     
                     <div class="action-container">
@@ -338,8 +432,8 @@
                                 Resume <i class="fa-solid fa-chevron-down" id="arrowIcon" style="font-size: 0.8rem;"></i>
                             </button>
                             <div class="dropdown-menu" id="resumeMenu">
-                                <a href="assets/LAI_Yu_Ching_Resume_English.pdf" target="_blank">English</a>
-                                <a href="assets/LAI_Yu_Ching_Resume_Chinese.pdf" target="_blank">Chinese</a>
+                                <a href="assets/LAI_Yu_Ching_Resume (2).pdf" target="_blank">English</a>
+                                <a href="assets/LAI_Yu_Ching_CV_ver2.pdf" target="_blank">Chinese</a>
                             </div>
                         </div>
                     </div>
@@ -348,7 +442,6 @@
                 <!-- Right Hand Side: Big Profile Picture from Assets -->
                 <div class="hero-right">
                     <div class="profile-frame">
-                        <!-- Please add your image file format token extensions inside the string below (e.g., .jpg, .png) -->
                         <img src="assets/myprofilepic.jpg" alt="LAI Yu Ching">
                     </div>
                 </div>
@@ -356,11 +449,35 @@
             </div>
         </section>
 
-        <!-- Placeholder Sections to preserve page layout layout -->
+        <!-- About Section with Dynamic Sliding Boxes -->
         <section id="about">
-            <div>
-                <h2 class="section-title">About</h2>
-                <p style="color: var(--text-gray);">Placeholder for your About section content.</p>
+            <div style="width: 100%;">
+                <h2 class="section-title">About Me</h2>
+                
+                <div class="about-split">
+                    <!-- Left Hand Side Box: Academic Experience -->
+                    <div class="about-box left-slide" id="leftAboutBox">
+                        <div class="edu-title">Educations</div>
+                        <div class="edu-school">Hong Kong University of Science and Technology</div>
+                        <div class="edu-degree">Bachelor of Engineering[cite: 1]</div>
+                        <div class="edu-major">Major in Electronic and Computer Engineering[cite: 1]</div>
+                        <div class="edu-date">Sep 1, 2022 - 15 July, 2026[cite: 1]</div>
+                        
+                        <!-- Reserved Space for School Logo -->
+                        <div class="school-logo-container">
+                            <!-- Drop an <img> tag in here later when you have the file asset ready -->
+                            <img src="assets/school_logo.jpg" alt="UST_logo">
+                        </div>
+                    </div>
+
+                    <!-- Right Hand Side Box: Placeholder for your next instructions -->
+                    <div class="about-box right-slide" id="rightAboutBox">
+                        <div class="edu-title">Professional Overview</div>
+                        <p style="color: var(--text-gray); line-height: 1.6;">
+                            This box will slide open concurrently alongside your education data block. Ready for your custom layout definitions!
+                        </p>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -387,23 +504,41 @@
 
     </main>
 
-    <!-- JavaScript Handling interactive elements -->
+    <!-- JavaScript Handling interactive elements & scroll transitions -->
     <script>
+        // --- Resume dropdown handling ---
         const resumeBtn = document.getElementById('resumeBtn');
         const resumeMenu = document.getElementById('resumeMenu');
 
-        // Toggle dropdown display upon clicking the main option block
         resumeBtn.addEventListener('click', function(event) {
             event.stopPropagation();
             resumeMenu.classList.toggle('show-menu');
         });
 
-        // Hides UI overlay if the client clicks out of focus areas
         document.addEventListener('click', function() {
             if (resumeMenu.classList.contains('show-menu')) {
                 resumeMenu.classList.remove('show-menu');
             }
         });
+
+        // --- Intersection Observer for dynamic slide-outs ---
+        const observerOptions = {
+            root: null,
+            threshold: 0.25 // Trigger when 25% of the section is visible to ensure the title has displayed
+        };
+
+        const aboutObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    document.getElementById('leftAboutBox').classList.add('animate-slide');
+                    document.getElementById('rightAboutBox').classList.add('animate-slide');
+                    observer.unobserve(entry.target); // Stops tracking once the slide completes successfully
+                }
+            });
+        }, observerOptions);
+
+        // Bind intersection engine onto the main about container node
+        aboutObserver.observe(document.getElementById('about'));
     </script>
 
 </body>
