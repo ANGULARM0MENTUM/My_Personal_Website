@@ -27,7 +27,7 @@
         body {
             background-color: var(--bg-dark);
             color: var(--text-light);
-            padding-top: var(--nav-height); /* Prevents content from hiding behind the fixed navbar */
+            padding-top: var(--nav-height);
         }
 
         /* --- Sticky Top Navigation Bar --- */
@@ -136,10 +136,17 @@
             margin-bottom: 30px;
         }
 
-        /* Social Media Buttons */
+        /* Action Panel for Links and Resume */
+        .action-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
         .social-container {
             display: flex;
-            gap: 20px;
+            gap: 15px;
         }
 
         .social-icon {
@@ -159,6 +166,64 @@
         .social-icon:hover {
             background-color: rgba(100, 255, 218, 0.1);
             transform: translateY(-3px);
+        }
+
+        /* Interactive Resume Dropdown Button */
+        .resume-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .resume-btn {
+            background: transparent;
+            color: var(--accent-cyan);
+            border: 1px solid var(--accent-cyan);
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .resume-btn:hover {
+            background-color: rgba(100, 255, 218, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            bottom: 55px; /* Sits cleanly above the button */
+            left: 0;
+            background-color: var(--bg-card);
+            min-width: 140px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5);
+            border: 1px solid #233554;
+            border-radius: 4px;
+            z-index: 5;
+        }
+
+        .dropdown-menu a {
+            color: var(--text-light);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 0.95rem;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: rgba(100, 255, 218, 0.15);
+            color: var(--accent-cyan);
+        }
+
+        /* Utility class controlled via JavaScript to switch visibility */
+        .show-menu {
+            display: block;
         }
 
         .hero-right {
@@ -200,7 +265,6 @@
             transition: all 0.3s ease;
         }
 
-        /* Frame animation effect when hovering over the picture area */
         .profile-frame:hover img {
             transform: translate(-4px, -4px);
         }
@@ -209,7 +273,7 @@
             transform: translate(4px, 4px);
         }
 
-        /* Responsive design for tablets and mobile */
+        /* Responsive Design */
         @media (max-width: 768px) {
             .hero-section {
                 flex-direction: column-reverse;
@@ -219,11 +283,15 @@
             .hero-description {
                 margin: 0 auto 30px auto;
             }
-            .social-container {
+            .action-container {
                 justify-content: center;
             }
+            .dropdown-menu {
+                bottom: auto;
+                top: 55px; /* Flips downward on mobile rows to fit screen real estate */
+            }
             .nav-links {
-                display: none; /* We can add a mobile hamburger menu later if needed */
+                display: none;
             }
             .profile-frame {
                 width: 240px;
@@ -252,27 +320,39 @@
         <section id="welcome">
             <div class="hero-section">
                 
-                <!-- Left Hand Side: Text Lines & Buttons -->
+                <!-- Left Hand Side: Text Lines & Interactive Actions -->
                 <div class="hero-left">
                     <div class="hero-subtitle">Electronic and Computer Engineer</div>
                     <h1 class="hero-name">LAI Yu Ching (TOM)</h1>
                     <p class="hero-description">
-                        Motivated and enthusiastic graduate student specialized in Embedded systems, Analogue Circuit Design, AI networks, and algorithms[cite: 1].
+                        Motivated and enthusiastic graduate student specialized in Embedded systems, Analogue Circuit Design, AI networks, and algorithms.
                     </p>
                     
-                    <!-- Iconed Social Buttons -->
-                    <div class="social-container">
-                        <!-- Replace href attributes with your actual link URLs -->
-                        <a href="https://github.com/ANGULARM0MENTUM" target="_blank" class="social-icon" title="GitHub"><i class="fa-brands fa-github"></i></a>
-                        <a href="https://www.linkedin.com/in/yu-ching-lai-a65740326" target="_blank" class="social-icon" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
-                        <a href="https://www.instagram.com/holy_sith1969?igsh=MTJzaHIyMjE3ejV6cA==" target="_blank" class="social-icon" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <div class="action-container">
+                        <!-- Iconed Social Buttons -->
+                        <div class="social-container">
+                            <a href="https://github.com/ANGULARM0MENTUM" target="_blank" class="social-icon" title="GitHub"><i class="fa-brands fa-github"></i></a>
+                            <a href="https://www.linkedin.com/in/yu-ching-lai-a65740326" target="_blank" class="social-icon" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                            <a href="https://www.instagram.com/holy_sith1969?igsh=MTJzaHIyMjE3ejV6cA==" target="_blank" class="social-icon" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        </div>
+
+                        <!-- Resume Segmented Dropdown Menu -->
+                        <div class="resume-dropdown">
+                            <button class="resume-btn" id="resumeBtn">
+                                Resume <i class="fa-solid fa-chevron-up" id="arrowIcon" style="font-size: 0.8rem;"></i>
+                            </button>
+                            <div class="dropdown-menu" id="resumeMenu">
+                                <a href="assets/LAI_Yu_Ching_Resume_English.pdf" target="_blank">English</a>
+                                <a href="assets/LAI_Yu_Ching_Resume_Chinese.pdf" target="_blank">Chinese</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Right Hand Side: Big Profile Picture with Frame -->
+                <!-- Right Hand Side: Big Profile Picture from Assets -->
                 <div class="hero-right">
                     <div class="profile-frame">
-                        <!-- Points to your photo uploaded in your root directory -->
+                        <!-- Please add your image file format token extensions inside the string below (e.g., .jpg, .png) -->
                         <img src="assets/myprofilepic.jpg" alt="LAI Yu Ching">
                     </div>
                 </div>
@@ -280,7 +360,7 @@
             </div>
         </section>
 
-        <!-- Placeholder Sections to enable scrolling mechanics -->
+        <!-- Placeholder Sections to preserve page layout layout -->
         <section id="about">
             <div>
                 <h2 class="section-title">About</h2>
@@ -310,6 +390,25 @@
         </section>
 
     </main>
+
+    <!-- JavaScript Handling interactive elements -->
+    <script>
+        const resumeBtn = document.getElementById('resumeBtn');
+        const resumeMenu = document.getElementById('resumeMenu');
+
+        // Toggle dropdown display upon clicking the main option block
+        resumeBtn.addEventListener('click', function(event) {
+            event.stopPropagation();
+            resumeMenu.classList.toggle('show-menu');
+        });
+
+        // Hides UI overlay if the client clicks out of focus areas
+        document.addEventListener('click', function() {
+            if (resumeMenu.classList.contains('show-menu')) {
+                resumeMenu.classList.remove('show-menu');
+            }
+        });
+    </script>
 
 </body>
 </html>
