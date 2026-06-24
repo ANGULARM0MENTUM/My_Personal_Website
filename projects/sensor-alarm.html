@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STM32 Sensor & Alarm Deep Dive | Lai Yu Ching</title>
+    <style>
+        body {
+            background-color: #0b1329;
+            color: #f8fafc;
+            font-family: system-ui, sans-serif;
+            line-height: 1.8;
+            padding: 40px max(5vw, 20px);
+            margin: 0;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Fixed background element targeting only the right side and fading left */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 50vw;
+            height: 100vh;
+            /* Leverages the same asset setup structure adjusted for the projects directory */
+            background-image: url('../assets/sensor_alarm_background.jpg');
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.25; /* Softened slightly more to keep highly detailed technical code text perfectly legible */
+            -webkit-mask-image: linear-gradient(to left, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
+            mask-image: linear-gradient(to left, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
+        }
+
+        .back-link {
+            color: #64ffda;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 30px;
+            transition: color 0.3s ease;
+        }
+        .back-link:hover {
+            color: #f8fafc;
+        }
+        
+        h1 { font-size: 2.5rem; color: #f8fafc; margin-bottom: 10px; }
+        .meta { color: #64ffda; font-family: monospace; margin-bottom: 40px; }
+        .content-block { max-width: 800px; margin-bottom: 40px; }
+        h3 { color: #f8fafc; margin: 30px 0 15px 0; font-size: 1.3rem; }
+        p { color: #8892b0; margin-bottom: 20px; text-align: justify; }
+        ul { color: #8892b0; margin-left: 20px; margin-bottom: 20px; }
+
+        /* Styling for the inline layout display image */
+        .project-image-container {
+            width: 100%;
+            margin: 35px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #233554;
+            box-shadow: 0 10px 30px -15px rgba(2, 12, 27, 0.7);
+        }
+        .project-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+        }
+
+        @media (max-width: 768px) {
+            body::before {
+                width: 100vw;
+                opacity: 0.15;
+                -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.1) 100%);
+                mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.1) 100%);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="../index.html" class="back-link">&larr; Return to Main Page</a>
+
+    <h1>Automated Sensor & Security Alarm System</h1>
+    <div class="meta">Hardware: STM32F103VET6, SR602 PIR, 4x3 Keypad | Language: C++ / Bare-Metal Hardware HAL</div>
+
+    <div class="content-block">
+        <p>
+            This project involved developing a real-time bare-metal security control node centered around the ARM Cortex-M3 architecture. Utilizing the STM32F103VET6 MCU, the objective was to build a highly responsive system capable of low-power motion telemetry tracking alongside synchronous passcode authorization matrices.
+        </p>
+
+        <h3>1. Firmware Architecture & Peripheral Integration</h3>
+        <p>
+            The system logic operates on a strict Finite State Machine (FSM) architecture integrated into a deterministic timer-driven polling schedule. The SR602 pyroelectric infrared (PIR) motion sensor is assigned to an external interrupt line (EXTI) configured for rising-edge triggers to ensure immediate, microsecond-level latency signaling upon detection. Concurrently, the 4x3 matrix keypad utilizes a dynamic row-scanning technique combined with configured internal pull-up GPIO registers to parse inputs without halting core system loops.
+        </p>
+
+        <div class="project-image-container">
+            <img src="../assets/sensor_alarm_img1.jpg" alt="STM32 Embedded Security System Microcontroller Topology Diagram">
+        </div>
+
+        <h3>2. Engineering Difficulties & Optimization Strategies</h3>
+        <ul>
+            <li>
+                <strong>Mechanical Switch Debouncing & Race Conditions:</strong> A major challenge arose from mechanical noise during matrix keypad decoding, which triggered ghost inputs. This was resolved by designing an asynchronous firmware debounce filter using localized hardware timer tickers rather than basic execution blocking (`HAL_Delay`).
+            </li>
+            <li>
+                <strong>Power Consumption vs. Latency Trade-offs:</strong> Maintaining high responsiveness for the SR602 sensor while scanning the matrix keypad risked high current draw. To optimize efficiency, the MCU core was configured to enter low-power Sleep mode, waking up dynamically via EXTI interrupt lines only when hardware activity is detected.
+            </li>
+            <li>
+                <strong>Priority Inversion on the Nested Vector Interrupt Controller (NVIC):</strong> High-frequency keypad scanning routines occasionally clashed with critical sensor alert sequences. This required careful configuration of sub-priority grouping inside the NVIC register maps to ensure real-world threat indicators reliably take precedence over operational inputs.
+            </li>
+        </ul>
+    </div>
+
+</body>
+</html>
