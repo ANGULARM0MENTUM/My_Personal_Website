@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -24,9 +24,53 @@
         }
 
         body {
+            /* Modified background: Initial dark state, dynamically shifting via inline JavaScript styles */
             background-color: var(--bg-dark);
+            background-image: radial-gradient(circle 0px at 0px 0px, rgba(100, 255, 218, 0.08), transparent 80%);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
             color: var(--text-light);
             padding-top: var(--nav-height);
+            min-height: 100vh;
+        }
+
+        /* --- Custom Interactive Dot Cursor Styling --- */
+        .custom-dot-cursor {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-cyan);
+            border-radius: 50%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275), width 0.2s, height 0.2s;
+            box-shadow: 0 0 12px var(--accent-cyan), 0 0 20px rgba(100, 255, 218, 0.5);
+        }
+
+        /* Expands smoothly into a precise micro-ring frame over interactive elements */
+        .custom-dot-cursor.cursor-hover {
+            width: 24px;
+            height: 24px;
+            background-color: rgba(100, 255, 218, 0.1);
+            border: 1px solid var(--accent-cyan);
+            box-shadow: 0 0 15px rgba(100, 255, 218, 0.3);
+        }
+
+        /* Hide the native operating system cursor across desktops for immersion */
+        @media (min-width: 769px) {
+            html, body, a, button, .project-node, .skills-tab-btn, .timeline-card {
+                cursor: none !important;
+            }
+        }
+        
+        /* Automatically disable custom mouse vectors on touchscreens to preserve framework integrity */
+        @media (max-width: 768px) {
+            .custom-dot-cursor {
+                display: none !important;
+            }
         }
 
         /* --- Sticky Top Navigation Bar --- */
@@ -652,6 +696,149 @@
             color: var(--text-light);
         }
 
+        /* --- Timeline Extension Styles --- */
+        .timeline-wrapper {
+            position: relative;
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
+
+        /* The vertical spine line */
+        .timeline-wrapper::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 30px;
+            height: 100%;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--accent-cyan) 70%, rgba(35, 53, 84, 0.4) 100%);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 40px;
+            padding-left: 70px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .timeline-item.animate-timeline {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Interactive bounding circle track nodes */
+        .timeline-marker {
+            position: absolute;
+            left: 21px;
+            top: 5px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: var(--bg-dark);
+            border: 2px solid var(--accent-cyan);
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-marker::after {
+            content: "";
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--accent-cyan);
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item:hover .timeline-marker {
+            box-shadow: 0 0 12px var(--accent-cyan);
+            transform: scale(1.15);
+        }
+
+        .timeline-item.current-seeking .timeline-marker {
+            border-color: #ffda64; /* Alternate warning neon node for active status look */
+        }
+        .timeline-item.current-seeking .timeline-marker::after {
+            background-color: #ffda64;
+        }
+
+        /* Container Card blocks */
+        .timeline-card {
+            background-color: var(--bg-card);
+            border: 1px solid #233554;
+            border-radius: 6px;
+            padding: 25px 30px;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-card:hover {
+            border-color: var(--accent-cyan);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px -15px rgba(2, 12, 27, 0.7);
+        }
+
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .role-title {
+            font-size: 1.3rem;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        .role-title span {
+            color: var(--accent-cyan);
+            font-weight: 500;
+            font-size: 1.15rem;
+        }
+
+        .timeline-date {
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: var(--accent-cyan);
+            background: rgba(100, 255, 218, 0.08);
+            padding: 4px 12px;
+            border-radius: 4px;
+        }
+
+        .timeline-card h4 {
+            color: var(--text-gray);
+            font-weight: 500;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+        .timeline-details {
+            list-style: none;
+        }
+
+        .timeline-details li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 10px;
+            color: var(--text-gray);
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+
+        .timeline-details li::before {
+            content: "▹";
+            position: absolute;
+            left: 0;
+            color: var(--accent-cyan);
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             #welcome {
@@ -728,13 +915,30 @@
             .project-node-label {
                 font-size: 0.65rem;
             }
+
+            .timeline-wrapper::before {
+                left: 15px;
+            }
+            .timeline-item {
+                padding-left: 45px;
+            }
+            .timeline-marker {
+                left: 6px;
+            }
+            .timeline-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
         }
     </style>
 </head>
 <body>
 
+    <div class="custom-dot-cursor" id="dotCursor"></div>
+
     <nav>
-        <a href="#welcome" class="nav-logo">LAI Yu Ching</a>
+        <a href="#welcome" class="nav-logo">LAI, Yu Ching</a>
         <div class="nav-links">
             <a href="#about">About</a>
             <a href="#skills">Skills</a>
@@ -750,7 +954,7 @@
                 
                 <div class="hero-left">
                     <div class="hero-subtitle">Electronic and Computer Engineer</div>
-                    <h1 class="hero-name">LAI Yu Ching (TOM)</h1>
+                    <h1 class="hero-name">LAI, Yu Ching (TOM)</h1>
                     <p class="hero-description">
                         Motivated and enthusiastic graduate student specialized in Embedded systems, Analogue Circuit Design, AI networks, and algorithms.
                     </p>
@@ -825,7 +1029,14 @@
                                 </li>
                                 <li class="lang-item">
                                     <span class="lang-name">Chinese (Mandarin)</span>
-                                    <span class="lang-proficiency">Native</span>
+                                    <span class="lang-proficiency">Native</span>                                </li>
+                                <li class="lang-item">
+                                    <span class="lang-name">German</span>
+                                    <span class="lang-proficiency">Basic</span>
+                                </li>
+                                <li class="lang-item">
+                                    <span class="lang-name">Japanese</span>
+                                    <span class="lang-proficiency">Basic</span>
                                 </li>
                             </ul>
                         </div>
@@ -992,140 +1203,221 @@
         <section id="experience">
             <div>
                 <h2 class="section-title">Work Experiences</h2>
-                <p style="color: var(--text-gray);">Placeholder for your Professional Timeline.</p>
+                
+                <div class="timeline-wrapper">
+                    
+                    <!-- Timeline Item 1: Current Status -->
+                    <div class="timeline-item current-seeking">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-card">
+                            <div class="timeline-header">
+                                <h3 class="role-title">Fresh Graduate <span>(Seeking Opportunities)</span></h3>
+                                <span class="timeline-date">Present</span>
+                            </div>
+                            <h4>Hardware & AI Engineering Fields</h4>
+                            <ul class="timeline-details">
+                                <li>Actively looking to leverage a specialized background in Electronic & Computer Engineering alongside advanced Artificial Intelligence competencies.</li>
+                                <li>Eager to contribute to structural circuit maps, embedded controller code configurations, machine learning networks, and complex algorithm developments.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Item 2: Intern Experience -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-card">
+                            <div class="timeline-header">
+                                <h3 class="role-title">Engineer Intern</h3>
+                                <span class="timeline-date">Jul 3, 2025 - Aug 29, 2025</span>
+                            </div>
+                            <h4>Hong Kong Centre of Logistics Robotics, Hong Kong</h4>
+                            <ul class="timeline-details">
+                                <li>Contributed to a medicine packaging machine project utilizing ROS2, WSL2 Ubuntu, and C++ to ensure system functionality and structural reliability.</li>
+                                <li>Optimized operational parameters of the packaging machinery, significantly increasing machine throughput and overall process efficiency.</li>
+                                <li>Participated in the functionality and security testing of backend transaction websites to ensure seamless data exchange and robust system performance.</li>
+                                <li>Collaborated with engineering teams to debug and optimize robotic systems, gaining practical insights into logistics robotics applications.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
         </section>
 
     </main>
 
     <script>
-        // --- Resume dropdown handling ---
-        const resumeBtn = document.getElementById('resumeBtn');
-        const resumeMenu = document.getElementById('resumeMenu');
+// --- Custom Cursor & Smooth Trailing Gradient Spotlight Logic ---
+const dotCursor = document.getElementById('dotCursor');
 
-        resumeBtn.addEventListener('click', function(event) {
-            event.stopPropagation();
-            resumeMenu.classList.toggle('show-menu');
-        });
+let mouseX = 0;
+let mouseY = 0;
+let spotlightX = 0;
+let spotlightY = 0;
+const easeFactor = 0.12; 
 
-        document.addEventListener('click', function() {
-            if (resumeMenu.classList.contains('show-menu')) {
-                resumeMenu.classList.remove('show-menu');
+window.addEventListener('mousemove', (e) => {
+    dotCursor.style.left = `${e.clientX}px`;
+    dotCursor.style.top = `${e.clientY}px`;
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+});
+
+function updateSpotlight() {
+    spotlightX += (mouseX - spotlightX) * easeFactor;
+    spotlightY += (mouseY - spotlightY) * easeFactor;
+    document.body.style.backgroundImage = `radial-gradient(circle 450px at ${spotlightX}px ${spotlightY}px, rgba(100, 255, 218, 0.07) 0%, rgba(11, 19, 41, 0) 100%)`;
+    requestAnimationFrame(updateSpotlight);
+}
+requestAnimationFrame(updateSpotlight);
+
+
+// --- Visual Expansion Hover States ---
+const interactiveSelectors = 'a, button, .project-node, .skills-tab-btn, .social-icon, .school-logo-container, .timeline-card';
+document.querySelectorAll(interactiveSelectors).forEach(element => {
+    element.addEventListener('mouseenter', () => dotCursor.classList.add('cursor-hover'));
+    element.addEventListener('mouseleave', () => dotCursor.classList.remove('cursor-hover'));
+});
+
+
+// --- Resume dropdown handling ---
+const resumeBtn = document.getElementById('resumeBtn');
+const resumeMenu = document.getElementById('resumeMenu');
+
+resumeBtn.addEventListener('click', function(event) {
+    event.stopPropagation();
+    resumeMenu.classList.toggle('show-menu');
+});
+
+document.addEventListener('click', function() {
+    if (resumeMenu.classList.contains('show-menu')) {
+        resumeMenu.classList.remove('remove-menu');
+    }
+});
+
+
+// --- Switchable Decks Tab Controller Logic ---
+function switchDeck(deckId) {
+    const decks = document.querySelectorAll('.skills-deck');
+    const buttons = document.querySelectorAll('.skills-tab-btn');
+
+    decks.forEach(deck => {
+        deck.classList.remove('active-deck');
+    });
+
+    buttons.forEach(btn => {
+        btn.classList.remove('active-tab');
+    });
+
+    const targetDeck = document.getElementById(deckId);
+    targetDeck.classList.add('active-deck');
+
+    event.currentTarget.classList.add('active-tab');
+}
+
+
+// --- Interactive Project Wheel Mathematics / Logic ---
+const wheelNodes = document.querySelectorAll('.project-node');
+const hubTitle = document.getElementById('hubTitle');
+const hubDesc = document.getElementById('hubDesc');
+
+const defaultTitle = hubTitle.textContent;
+const defaultDesc = hubDesc.textContent;
+
+function positionWheelNodes() {
+    const totalNodes = wheelNodes.length;
+    const containerWidth = document.getElementById('projectWheel').offsetWidth;
+    
+    const radius = window.innerWidth <= 768 ? (containerWidth / 2) - 45 : (containerWidth / 2) - 65;
+    const center = containerWidth / 2;
+
+    wheelNodes.forEach((node, index) => {
+        const angle = (index * (2 * Math.PI / totalNodes)) - (Math.PI / 2); 
+        
+        const x = center + radius * Math.cos(angle) - (node.offsetWidth / 2);
+        const y = center + radius * Math.sin(angle) - (node.offsetHeight / 2);
+        
+        node.style.left = `${x}px`;
+        node.style.top = `${y}px`;
+    });
+}
+
+positionWheelNodes();
+window.addEventListener('resize', positionWheelNodes);
+
+wheelNodes.forEach(node => {
+    const updateHub = () => {
+        wheelNodes.forEach(n => n.classList.remove('active-node'));
+        node.classList.add('active-node');
+        hubTitle.textContent = node.getAttribute('data-title');
+        hubDesc.textContent = node.getAttribute('data-desc');
+    };
+
+    const resetHub = () => {
+        node.classList.remove('active-node');
+        hubTitle.textContent = defaultTitle;
+        hubDesc.textContent = defaultDesc;
+    };
+
+    node.addEventListener('mouseenter', updateHub);
+    node.addEventListener('mouseleave', resetHub);
+    
+    node.addEventListener('click', (e) => {
+        updateHub();
+        const url = node.getAttribute('data-url');
+        if (url) {
+            window.location.href = url;
+        }
+    });
+});
+
+
+// --- Fully Dynamic Intersection Observer for scroll triggers ---
+const observerOptions = {
+    root: null,
+    threshold: 0.1 
+};
+
+const globalObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        const sectionTitle = entry.target.querySelector('.section-title');
+        
+        if (entry.isIntersecting) {
+            if (sectionTitle) sectionTitle.classList.add('animate-title');
+            
+            if (entry.target.id === 'about') {
+                document.getElementById('leftAboutBox').classList.add('animate-slide');
+                document.getElementById('overviewBox').classList.add('animate-slide');
+                document.getElementById('languagesBox').classList.add('animate-slide');
             }
-        });
-
-        // --- Switchable Decks Tab Controller Logic ---
-        function switchDeck(deckId) {
-            const decks = document.querySelectorAll('.skills-deck');
-            const buttons = document.querySelectorAll('.skills-tab-btn');
-
-            decks.forEach(deck => {
-                deck.classList.remove('active-deck');
-            });
-
-            buttons.forEach(btn => {
-                btn.classList.remove('active-tab');
-            });
-
-            const targetDeck = document.getElementById(deckId);
-            targetDeck.classList.add('active-deck');
-
-            event.currentTarget.classList.add('active-tab');
-        }
-
-        // --- Interactive Project Wheel Mathematics / Logic ---
-        const wheelNodes = document.querySelectorAll('.project-node');
-        const hubTitle = document.getElementById('hubTitle');
-        const hubDesc = document.getElementById('hubDesc');
-
-        const defaultTitle = hubTitle.textContent;
-        const defaultDesc = hubDesc.textContent;
-
-        function positionWheelNodes() {
-            const totalNodes = wheelNodes.length;
-            const containerWidth = document.getElementById('projectWheel').offsetWidth;
             
-            const radius = window.innerWidth <= 768 ? (containerWidth / 2) - 45 : (containerWidth / 2) - 65;
-            const center = containerWidth / 2;
-
-            wheelNodes.forEach((node, index) => {
-                const angle = (index * (2 * Math.PI / totalNodes)) - (Math.PI / 2); 
-                
-                const x = center + radius * Math.cos(angle) - (node.offsetWidth / 2);
-                const y = center + radius * Math.sin(angle) - (node.offsetHeight / 2);
-                
-                node.style.left = `${x}px`;
-                node.style.top = `${y}px`;
-            });
-        }
-
-        positionWheelNodes();
-        window.addEventListener('resize', positionWheelNodes);
-
-        wheelNodes.forEach(node => {
-            const updateHub = () => {
-                wheelNodes.forEach(n => n.classList.remove('active-node'));
-                node.classList.add('active-node');
-                hubTitle.textContent = node.getAttribute('data-title');
-                hubDesc.textContent = node.getAttribute('data-desc');
-            };
-
-            const resetHub = () => {
-                node.classList.remove('active-node');
-                hubTitle.textContent = defaultTitle;
-                hubDesc.textContent = defaultDesc;
-            };
-
-            node.addEventListener('mouseenter', updateHub);
-            node.addEventListener('mouseleave', resetHub);
+            if (entry.target.id === 'experience') {
+                document.querySelectorAll('.timeline-item').forEach(item => {
+                    item.classList.add('animate-timeline');
+                });
+            }
+        } else {
+            if (sectionTitle) sectionTitle.classList.remove('animate-title');
             
-            // Updated click handler to navigate to the data-url subpage path
-            node.addEventListener('click', (e) => {
-                updateHub();
-                const url = node.getAttribute('data-url');
-                if (url) {
-                    window.location.href = url;
-                }
-            });
-        });
+            if (entry.target.id === 'about') {
+                document.getElementById('leftAboutBox').classList.remove('animate-slide');
+                document.getElementById('overviewBox').classList.remove('animate-slide');
+                document.getElementById('languagesBox').classList.remove('animate-slide');
+            }
+            
+            if (entry.target.id === 'experience') {
+                document.querySelectorAll('.timeline-item').forEach(item => {
+                    item.classList.remove('animate-timeline');
+                });
+            }
+        }
+    });
+}, observerOptions);
 
-
-        // --- Fully Dynamic Intersection Observer for scroll triggers ---
-        const observerOptions = {
-            root: null,
-            threshold: 0.1 
-        };
-
-        const globalObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                // Automatically find any .section-title element inside the current section
-                const sectionTitle = entry.target.querySelector('.section-title');
-                
-                if (entry.isIntersecting) {
-                    if (sectionTitle) sectionTitle.classList.add('animate-title');
-                    
-                    // Keep your unique animation triggers for the 'about' boxes intact
-                    if (entry.target.id === 'about') {
-                        document.getElementById('leftAboutBox').classList.add('animate-slide');
-                        document.getElementById('overviewBox').classList.add('animate-slide');
-                        document.getElementById('languagesBox').classList.add('animate-slide');
-                    }
-                } else {
-                    if (sectionTitle) sectionTitle.classList.remove('animate-title');
-                    
-                    if (entry.target.id === 'about') {
-                        document.getElementById('leftAboutBox').classList.remove('animate-slide');
-                        document.getElementById('overviewBox').classList.remove('animate-slide');
-                        document.getElementById('languagesBox').classList.remove('animate-slide');
-                    }
-                }
-            });
-        }, observerOptions);
-
-        // Tell the observer to monitor all top-level section elements uniformly
-        document.querySelectorAll('section').forEach(section => {
-            globalObserver.observe(section);
-        });
+document.querySelectorAll('section').forEach(section => {
+    globalObserver.observe(section);
+});
     </script>
 
 </body>
