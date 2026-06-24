@@ -11,25 +11,77 @@
             font-family: system-ui, sans-serif;
             line-height: 1.8;
             padding: 40px max(5vw, 20px);
+            margin: 0;
+            min-height: 100vh;
+            position: relative;
         }
+
+        /* Fixed background element targeting only the right side and fading left */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 50vw;
+            height: 100vh;
+            background-image: url('../assets/lc_cnn_background.jpg');
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.4;
+            -webkit-mask-image: linear-gradient(to left, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
+            mask-image: linear-gradient(to left, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
+        }
+
         .back-link {
             color: #64ffda;
             text-decoration: none;
             font-weight: bold;
             display: inline-block;
             margin-bottom: 30px;
+            transition: color 0.3s ease;
         }
+        .back-link:hover {
+            color: #f8fafc;
+        }
+        
         h1 { font-size: 2.5rem; color: #f8fafc; margin-bottom: 10px; }
         .meta { color: #64ffda; font-family: monospace; margin-bottom: 40px; }
         .content-block { max-width: 800px; margin-bottom: 40px; }
         h3 { color: #f8fafc; margin: 30px 0 15px 0; font-size: 1.3rem; }
         p { color: #8892b0; margin-bottom: 20px; text-align: justify; }
         ul { color: #8892b0; margin-left: 20px; margin-bottom: 20px; }
+
+        /* Styling for the new inline project display image */
+        .project-image-container {
+            width: 100%;
+            margin: 35px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #233554;
+            box-shadow: 0 10px 30px -15px rgba(2, 12, 27, 0.7);
+        }
+        .project-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+        }
+
+        @media (max-width: 768px) {
+            body::before {
+                width: 100vw;
+                opacity: 0.15;
+                -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.1) 100%);
+                mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.1) 100%);
+            }
+        }
     </style>
 </head>
 <body>
 
-    <a href="../index.html" class="back-link">¡ö Return to Main Page</a>
+    <a href="../index.html" class="back-link">&larr; Return to Main Page</a>
 
     <h1>Final Year Project: Automated Liquid Crystal Analysis</h1>
     <div class="meta">Frameworks: PyTorch, CUDA, Python | Timeline: 2025 - 2026</div>
@@ -43,6 +95,12 @@
         <p>
             Instead of standard off-the-shelf image classifiers, I adapted and optimized a custom Convolutional Neural Network pipeline. The architecture specialized in extracting structural fields by utilizing custom-weighted processing layers designed specifically for processing polarized material variations.
         </p>
+
+        <!-- NEW INSERTED IMAGE CONTAINER -->
+        <div class="project-image-container">
+            <!-- Replace 'project_diagram.jpg' with your actual filename if it differs -->
+            <img src="../assets/lc_cnn_img1.jpg" alt="CNN Architecture and Liquid Crystal Analysis Visualization">
+        </div>
 
         <h3>2. Optimization Strategies</h3>
         <ul>
