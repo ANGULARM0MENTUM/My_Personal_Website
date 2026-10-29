@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCWC Website Renewal | Lai Yu Ching</title>
+    <style>
+        body {
+            background-color: #0b1329;
+            color: #f8fafc;
+            font-family: system-ui, sans-serif;
+            line-height: 1.8;
+            padding: 40px max(5vw, 20px);
+            margin: 0;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Fixed background element targeting only the right side and fading left */
+        /* Upload the background image to assets/mcwc_background.jpg */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 50vw;
+            height: 100vh;
+            background-image: url('../assets/mcwc_background.jpg');
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.25;
+            -webkit-mask-image: linear-gradient(to left, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
+            mask-image: linear-gradient(to left, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
+        }
+
+        .back-link {
+            color: #64ffda;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 30px;
+            transition: color 0.3s ease;
+        }
+        .back-link:hover {
+            color: #f8fafc;
+        }
+        
+        h1 { font-size: 2.5rem; color: #f8fafc; margin-bottom: 10px; }
+        .meta { color: #64ffda; font-family: monospace; margin-bottom: 40px; }
+        .meta a { color: #64ffda; text-decoration: none; }
+        .meta a:hover { color: #f8fafc; }
+        .content-block { max-width: 800px; margin-bottom: 40px; }
+        h3 { color: #f8fafc; margin: 30px 0 15px 0; font-size: 1.3rem; }
+        p { color: #8892b0; margin-bottom: 20px; text-align: justify; }
+        ul { color: #8892b0; margin-left: 20px; margin-bottom: 20px; }
+
+        /* Styling for the inline layout display image */
+        .project-image-container {
+            width: 100%;
+            margin: 35px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #233554;
+            box-shadow: 0 10px 30px -15px rgba(2, 12, 27, 0.7);
+        }
+        .project-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+        }
+
+        @media (max-width: 768px) {
+            body::before {
+                width: 100vw;
+                opacity: 0.15;
+                -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.1) 100%);
+                mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.1) 100%);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="../index.html" class="back-link">&larr; Return to Main Page</a>
+
+    <h1>Mei Cheung Watch Case Website Renewal</h1>
+    <div class="meta">Freelance | Client: Mei Cheung Watch Case &amp; Component Limited | <a href="https://www.mcwc.com.hk" target="_blank">www.mcwc.com.hk</a></div>
+
+    <div class="content-block">
+        <p>
+            This freelance engagement renewed the public website of Mei Cheung Watch Case &amp; Component Limited (美昌錶殼製品有限公司), a Hong Kong manufacturer of precision watch cases established in 1991. The work replaced an aging corporate presence with a site that presents more than three decades of case-making — heritage, finishing, metrology, and factory capability — in a form suited to luxury-brand clients.
+        </p>
+
+        <h3>1. Site Structure &amp; Presentation</h3>
+        <p>
+            The renewal is a hand-built, multi-page site: Home, About Us, Products &amp; Service, Tour, and Contact Us. The homepage opens with the company name in English and Chinese, then walks through who they are, their pillars of quality and service, surface finishing, measurement systems, and practical automation on the factory floor. Type, photography, and a numbered navigation drawer were laid out so the same pages stay readable on a desktop and on a phone.
+        </p>
+
+        <!-- Upload the inline project image to assets/mcwc_img1.jpg -->
+        <div class="project-image-container">
+            <img src="../assets/mcwc_img1.jpg" alt="Mei Cheung Watch Case website renewal">
+        </div>
+
+        <h3>2. What the Renewal Had to Carry</h3>
+        <ul>
+            <li>
+                <strong>A workshop, not a catalogue:</strong> Photography of hand finishing, metrology equipment, and automated processes sits beside short copy, so the craft stays visible without crowding the reading column.
+            </li>
+            <li>
+                <strong>Bilingual identity:</strong> English carries the body of the site, while the Chinese company name and the “Est. 1991” line stay in the hero and the menu so the Hong Kong manufacturer is recognisable at a glance.
+            </li>
+            <li>
+                <strong>A live corporate address:</strong> The pages are static HTML and CSS, published on the client’s existing domain at <a href="https://www.mcwc.com.hk" target="_blank" style="color: #64ffda; text-decoration: none;">www.mcwc.com.hk</a>.
+            </li>
+        </ul>
+    </div>
+
+</body>
+</html>
